@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Yeni Müşteri Ekle | XVIA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div class="container mt-5" style="max-width: 600px;">
+        
+        <div th:if="${hata}" class="alert alert-danger text-center shadow-sm">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${hata}"></span>
+        </div>
+
+        <div class="card shadow border-0">
+            <div class="card-header text-white fw-bold py-3 text-center" style="background-color: #003366;">
+                YENİ MÜŞTERİ KAYDI
+            </div>
+            <div class="card-body p-4">
+                <form action="/musteriler/kaydet" method="POST" th:object="${yeniMusteri}" onsubmit="telefonBirlestir()">
+                    
+                    <input type="hidden" th:field="*{musteriId}">
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Müşteri Tipi</label>
+                        <select th:field="*{musteriTipi}" id="musteriTipi" class="form-select rounded-0" onchange="tipKontrol()">
+                            <option value="YERLI">YERLİ</option>
+                            <option value="YABANCI">YABANCI</option>
+                        </select>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="fw-bold">Ad</label>
+                            <input type="text" th:field="*{ad}" class="form-control rounded-0" required>
+                        </div>
+                        <div class="col">
+                            <label class="fw-bold">Soyad</label>
+                            <input type="text" th:field="*{soyad}" class="form-control rounded-0" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">TC Kimlik No</label>
+                        <input type="text" th:field="*{tcKimlik}" class="form-control rounded-0" maxlength="11" placeholder="11 Haneli TC">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Pasaport No</label>
+                        <input type="text" th:field="*{pasaportNo}" class="form-control rounded-0" placeholder="Sadece Yabancılar İçin">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">E-Posta</label>
+                        <input type="email" th:field="*{email}" class="form-control rounded-0" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Telefon Numarası</label>
+                        <div class="input-group">
+                            <select id="ulkeKodu" class="form-select bg-light" style="max-width: 130px;" disabled>
+                                <option value="+90">🇹🇷 +90</option>
+                                <option value="+1">🇺🇸 +1</option>
+                                <option value="+49">🇩🇪 +49</option>
+                                <option value="+44">🇬🇧 +44</option>
+                                <option value="+33">🇫🇷 +33</option>
+                                <option value="+971">🇦🇪 +971</option>
+                                <option value="+7">🇷🇺 +7</option>
+                                <option value="+994">🇦🇿 +994</option>
+                            </select>
+                            
+                            <input type="text" id="telInput" class="form-control rounded-0" placeholder="5XX XXX XX XX" required>
+                        </div>
+                        <input type="hidden" th:field="*{telefon}" id="gercekTelefon">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-0 fw-bold">KAYDET</button>
+                        <a href="/musteriler" class="btn btn-outline-secondary rounded-0">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sayfa açıldığında çalışsın
+        document.addEventListener("DOMContentLoaded", function() {
+            tipKontrol();
+        });
+
+        function tipKontrol() {
+            var tip = document.getElementById("musteriTipi").value;
+            var kodKutusu = document.getElementById("ulkeKodu");
+
+            if (tip === "YERLI") {
+                // Yerli ise +90 yap ve kilitle
+                kodKutusu.value = "+90";
+                kodKutusu.disabled = true;
+                kodKutusu.classList.add("bg-light"); // Gri yap
+            } else {
+                // Yabancı ise kilidi aç, seçebilsin
+                kodKutusu.disabled = false;
+                kodKutusu.classList.remove("bg-light"); // Beyaz yap
+            }
+        }
+
+        function telefonBirlestir() {
+            // Form gönderilmeden hemen önce Kodu ve Numarayı birleştir
+            var kod = document.getElementById("ulkeKodu").value;
+            var no = document.getElementById("telInput").value;
+            
+            // Veritabanına gidecek gizli kutuya yaz
+            document.getElementById("gercekTelefon").value = kod + " " + no;
+            
+            // Disabled olan kutular formda gitmez, o yüzden kilidi geçici açıyoruz (gerekirse)
+            // Ama biz zaten gizli input kullanıyoruz, sorun yok.
+        }
+    </script>
+
+</body>
+</html>

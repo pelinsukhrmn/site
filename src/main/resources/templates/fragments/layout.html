@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark py-3 shadow sticky-top no-print">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="/">
+                <i class="fa-solid fa-earth-europe me-2"></i>XVIA <span class="text-warning">GLOBAL</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    
+                    <li class="nav-item"><a class="nav-link" href="/">Anasayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ulkeler">Destinasyonlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/turlar">Turlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/oteller">Oteller</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/kampanyalar">Kampanyalar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/rehberler">Rehberler</a></li>
+                    
+                    <li class="nav-item dropdown ms-3" th:if="${session.kullanici != null}">
+                        <a class="nav-link dropdown-toggle btn btn-outline-light border-0" href="#" id="yonetimDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            YÖNETİM
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="yonetimDropdown">
+                            <li><a class="dropdown-item" href="/musteriler"><i class="fa-solid fa-users me-2 text-primary"></i>Müşteriler</a></li>
+                            <li><a class="dropdown-item" href="/rezervasyonlar"><i class="fa-solid fa-file-contract me-2 text-primary"></i>Rezervasyonlar</a></li>
+                            <li><a class="dropdown-item" href="/odemeler"><i class="fa-solid fa-credit-card me-2 text-primary"></i>Ödemeler & Finans</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/calisanlar"><i class="fa-solid fa-id-badge me-2 text-dark"></i>Personel Yönetimi</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item ms-3" th:if="${session.kullanici == null}">
+                        <a class="btn btn-warning text-dark rounded-0 fw-bold px-4" href="/login">GİRİŞ YAP</a>
+                    </li>
+
+                    <li class="nav-item dropdown ms-3" th:if="${session.kullanici != null}">
+                        <a class="nav-link dropdown-toggle text-white border border-white px-3 py-1" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user-tie me-2"></i><span th:text="${session.kullanici.ad}"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow" aria-labelledby="userDropdown">
+                            <li><span class="dropdown-header">Rol: <span th:text="${session.kullanici.calisanTipi}"></span></span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/logout"><i class="fa-solid fa-sign-out-alt me-2"></i>Çıkış Yap</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    </nav>
+
+</body>
+</html>

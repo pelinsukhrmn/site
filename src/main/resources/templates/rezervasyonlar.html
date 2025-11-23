@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rezervasyonlar | XVIA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-light">
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div class="container mt-4">
+        <div th:if="${mesaj}" class="alert alert-success text-center shadow-sm">
+            <i class="fa-solid fa-check-circle me-2"></i> <span th:text="${mesaj}"></span>
+        </div>
+
+        <div th:if="${hata}" class="alert alert-danger text-center shadow-sm">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${hata}"></span>
+        </div>
+    </div>
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Rezervasyon Takibi</h2>
+            <a href="/rezervasyonlar/ekle" class="btn btn-primary shadow"><i class="fa-solid fa-file-circle-plus"></i> Yeni Rezervasyon</a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Rez No</th>
+                            <th>Müşteri</th>
+                            <th>Tur</th>
+                            <th>Tarih</th>
+                            <th>Kişi</th>
+                            <th>Tutar</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rez : ${rezListesi}">
+                            <td th:text="${rez.rezervasyonNo}" class="fw-bold"></td>
+                            
+                            <td th:text="${rez.musteri.ad + ' ' + rez.musteri.soyad}"></td>
+                            <td th:text="${rez.tur.turAdi}"></td>
+                            
+                            <td th:text="${rez.baslangicTarihi}"></td>
+                            <td th:text="${rez.kisiSayisi}"></td>
+                            <td th:text="${rez.toplamTutar} + ' TL'"></td>
+                            <td>
+                                <span th:if="${rez.durum == 'ONAYLI'}" class="badge bg-success">ONAYLI</span>
+                                <span th:if="${rez.durum == 'BEKLIYOR'}" class="badge bg-warning text-dark">BEKLİYOR</span>
+                                <span th:if="${rez.durum == 'IPTAL'}" class="badge bg-danger">İPTAL</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/rezervasyonlar/sil/{id}(id=${rez.rezervasyonId})}" 
+                                   class="btn btn-sm btn-outline-danger rounded-circle"
+                                   onclick="return confirm('Silmek istiyor musunuz?')"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
