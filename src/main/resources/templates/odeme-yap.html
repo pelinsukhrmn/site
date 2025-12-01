@@ -5,55 +5,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="bg-light">
+<body>
+    <div th:replace="~{fragments/layout :: navbar}"></div>
     <div class="container mt-5" style="max-width: 600px;">
-        <div class="card shadow border-0 rounded-0">
-            <div class="card-header bg-dark text-white fw-bold py-3">TAHSİLAT EKRANI</div>
+        <div class="card shadow border-0">
+            <div class="card-header bg-dark text-white fw-bold py-3">TAHSİLAT</div>
             <div class="card-body p-4">
-                <div class="card-body p-4">
-                
-                <div th:if="${param.hata == 'borc_yok'}" class="alert alert-success text-center fw-bold">
-                    <i class="fa-solid fa-check-circle me-2"></i> Bu rezervasyonun tüm ödemesi tamamlanmıştır!
-                </div>
-
-                <div th:if="${param.hata == 'fazla_odeme'}" class="alert alert-danger text-center fw-bold">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i> Hata: Kalan borçtan fazla ödeme yapılamaz! 
-                    <br> (Kalan Tutar: <span th:text="${param.kalan}"></span> TL)
-                </div>
-
+                <div th:if="${param.hata}" class="alert alert-danger">HATA: Borçtan fazla ödeme yapılamaz!</div>
                 <form action="/odemeler/kaydet" method="POST" th:object="${yeniOdeme}">
-                <form action="/odemeler/kaydet" method="POST" th:object="${yeniOdeme}">
-                    
-                    <div class="mb-3">
-                        <label class="fw-bold">Rezervasyon Seçimi</label>
-                        <select th:field="*{rezervasyon}" class="form-select rounded-0" required>
-                            <option value="">Rezervasyon No Seçiniz...</option>
-                            <option th:each="r : ${rezervasyonlar}" 
-                                    th:value="${r.rezervasyonId}" 
-                                    th:text="${r.rezervasyonNo + ' - ' + r.musteri.ad + ' ' + r.musteri.soyad}"></option>
-                        </select>
+                    <div class="mb-3"><label class="fw-bold">Rezervasyon</label><select th:field="*{rezervasyon}" class="form-select"><option th:each="r : ${rezervasyonlar}" th:value="${r.rezervasyonId}" th:text="${r.rezervasyonNo}"></option></select></div>
+                    <div class="mb-3"><label class="fw-bold">Tutar ($)</label><input type="number" th:field="*{tutar}" class="form-control" required></div>
+                    <div class="mb-4 d-flex gap-3">
+                        <div class="form-check border p-3 w-50"><input class="form-check-input" type="radio" th:field="*{odemeTipi}" value="NAKIT" required><label class="fw-bold ms-2">NAKİT</label></div>
+                        <div class="form-check border p-3 w-50"><input class="form-check-input" type="radio" th:field="*{odemeTipi}" value="KART"><label class="fw-bold ms-2">KART</label></div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="fw-bold">Ödeme Tutarı (TL)</label>
-                        <input type="number" th:field="*{tutar}" class="form-control rounded-0" placeholder="0.00" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="fw-bold mb-2">Ödeme Yöntemi</label>
-                        <div class="d-flex gap-3">
-                            <div class="form-check border p-3 w-50 text-center">
-                                <input class="form-check-input float-none" type="radio" th:field="*{odemeTipi}" value="NAKIT" id="nakit" required>
-                                <label class="form-check-label d-block fw-bold mt-1" for="nakit">NAKİT</label>
-                            </div>
-                            <div class="form-check border p-3 w-50 text-center">
-                                <input class="form-check-input float-none" type="radio" th:field="*{odemeTipi}" value="KREDI_KARTI" id="kart">
-                                <label class="form-check-label d-block fw-bold mt-1" for="kart">KREDİ KARTI</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100 rounded-0 fw-bold py-2">TAHSİLAT YAP</button>
+                    <button type="submit" class="btn btn-success w-100 fw-bold">ONAYLA</button>
                 </form>
             </div>
         </div>

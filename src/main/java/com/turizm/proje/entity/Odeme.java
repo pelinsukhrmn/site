@@ -7,21 +7,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "odemeler")
 public class Odeme {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "odeme_id")
-    private Long odemeId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "odeme_id") private Long odemeId;
 
-    @ManyToOne
-    @JoinColumn(name = "rezervasyon_id")
-    private Rezervasyon rezervasyon;
+    @ManyToOne @JoinColumn(name = "rezervasyon_id") private Rezervasyon rezervasyon;
 
-    @Column(name = "tutar")
-    private Double tutar;
-
-    @Column(name = "odeme_tipi")
-    private String odemeTipi;
-
-    @Column(name = "odeme_tarihi")
-    private LocalDateTime odemeTarihi = LocalDateTime.now();
+    @Column(name = "tutar") private Double tutar;
+    @Column(name = "odeme_tipi") private String odemeTipi;
+    @Column(name = "odeme_tarihi") private LocalDateTime odemeTarihi;
 }

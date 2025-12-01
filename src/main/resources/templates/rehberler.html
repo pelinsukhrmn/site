@@ -1,37 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Rehberlerimiz | XVIA Global</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+<head><title>Rehberler</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"><link rel="stylesheet" th:href="@{/css/style.css}"></head>
 <body>
-
     <div th:replace="~{fragments/layout :: navbar}"></div>
-
     <div class="container my-5">
-        <h2 class="fw-bold text-center" style="color: #003366;">Profesyonel Rehber Kadromuz</h2>
-        <p class="text-center text-muted mb-5">Dünyanın her yerinde sizi evinizde hissettirecek uzman ekip.</p>
-
+        <h2 class="text-center fw-bold text-primary mb-5">Rehber Kadromuz</h2>
         <div class="row g-4">
             <div class="col-md-3" th:each="r : ${rehberListesi}" th:if="${r.calisanTipi == 'REHBER'}">
-                <div class="card guide-card h-100 text-center p-4 bg-white">
-                    <div class="mx-auto mb-3">
-                        <img th:src="'https://ui-avatars.com/api/?name=' + ${r.ad} + '+' + ${r.soyad} + '&background=003366&color=fff&size=128'" class="rounded-circle profile-img">
-                    </div>
-                    <h5 class="fw-bold mb-1" th:text="${r.ad + ' ' + r.soyad}">İsim Soyad</h5>
-                    <span class="badge bg-warning text-dark mb-3">Profesyonel Rehber</span>
-                    
-                    <div class="text-start ps-3 border-start border-3 border-primary bg-light p-2 rounded">
-                        <p class="mb-1 small"><i class="fa-solid fa-language me-2 text-primary"></i> <strong>Diller:</strong> İngilizce, Almanca</p>
-                        <p class="mb-1 small"><i class="fa-solid fa-star me-2 text-warning"></i> <strong>Puan:</strong> 4.9/5.0</p>
-                        <p class="mb-0 small"><i class="fa-solid fa-envelope me-2 text-muted"></i> <span th:text="${r.email}"></span></p>
-                    </div>
+                <div class="card shadow text-center p-4">
+                    <img th:src="'https://ui-avatars.com/api/?name=' + ${r.ad} + '+' + ${r.soyad} + '&background=003366&color=fff&size=128'" class="rounded-circle mx-auto mb-3" width="100">
+                    <h5 class="fw-bold" th:text="${r.ad + ' ' + r.soyad}"></h5>
+                    <span class="badge bg-warning text-dark mb-2">Profesyonel Rehber</span>
+                    <p class="small text-muted" th:text="${r.email}"></p>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>

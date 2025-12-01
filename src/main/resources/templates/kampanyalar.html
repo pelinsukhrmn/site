@@ -1,65 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Avantajlı Dönemler | XVIA Global</title>
+    <title>Kampanyalar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
     <div th:replace="~{fragments/layout :: navbar}"></div>
-
     <div class="container my-5">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold" style="color: #003366;">Avantajlı Fiyat Dönemleri</h2>
-            <p class="text-muted">Sezonluk indirimleri ve özel fırsatları kaçırmayın.</p>
-        </div>
-
-        <div th:if="${kampanyaListesi.empty}" class="alert alert-info text-center">
-            Şu an aktif bir kampanya bulunmuyor. Lütfen daha sonra tekrar kontrol edin.
-        </div>
-
+        <h2 class="text-center fw-bold text-primary mb-5">Fırsat Dönemleri</h2>
         <div class="row g-4">
-            <div class="col-md-6" th:each="kampanya : ${kampanyaListesi}">
-                <div class="card deal-card p-4 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5 class="fw-bold text-primary mb-1">
-                                <i class="fa-solid fa-plane-departure me-2"></i>
-                                <span th:text="${kampanya.tur.turAdi}">Tur Adı</span>
-                            </h5>
-                            <p class="text-muted small mb-2">
-                                <i class="fa-regular fa-calendar-alt me-1"></i>
-                                <span th:text="${kampanya.baslangicTarihi}"></span> - 
-                                <span th:text="${kampanya.bitisTarihi}"></span>
-                            </p>
-                        </div>
-                        <div class="text-end">
-                            <span class="discount-badge" th:if="${kampanya.indirimOrani > 0}">
-                                %<span th:text="${kampanya.indirimOrani}"></span> İNDİRİM
-                            </span>
-                        </div>
+            <div class="col-md-6" th:each="k : ${kampanyaListesi}">
+                <div class="card p-4 shadow-sm border-start border-5 border-warning">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="fw-bold" th:text="${k.tur.turAdi}"></h5>
+                        <span class="badge bg-danger" th:text="'%' + ${k.indirimOrani} + ' İNDİRİM'"></span>
                     </div>
-                    
-                    <hr class="my-3 opacity-25">
-                    
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="d-block small text-muted">Yetişkin Fiyatı</span>
-                            <span class="fw-bold fs-5 text-dark" th:text="${kampanya.yetiskinFiyati} + ' TL'">0 TL</span>
-                        </div>
-                        <div>
-                            <span class="d-block small text-muted">Çocuk Fiyatı</span>
-                            <span class="fw-bold fs-5 text-secondary" th:text="${kampanya.cocukFiyati} + ' TL'">0 TL</span>
-                        </div>
-                        <a th:href="@{/rezervasyonlar/ekle(turId=${kampanya.tur.turId})}" 
-   class="btn btn-outline-primary btn-sm rounded-pill px-3">Hemen Al</a>
+                    <p class="text-muted" th:text="${k.baslangicTarihi} + ' - ' + ${k.bitisTarihi}"></p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fw-bold fs-4" th:text="'$' + ${k.yetiskinFiyati}"></span>
+                        <a th:href="@{/rezervasyonlar/ekle(turId=${k.tur.turId})}" class="btn btn-outline-primary rounded-pill px-4">Hemen Al</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>

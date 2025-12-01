@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rezervasyon Oluştur</title>
+    <title>Rezervasyon Ekle</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="bg-light">
+<body>
+    
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
     <div class="container mt-5" style="max-width: 700px;">
         <div class="card shadow border-0">
-            <div class="card-header bg-primary text-white fw-bold py-3">YENİ REZERVASYON KAYDI</div>
+            <div class="card-header text-white fw-bold py-3 text-center" style="background-color: #003366;">
+                YENİ REZERVASYON KAYDI
+            </div>
             <div class="card-body p-4">
                 
-                <form action="/rezervasyonlar/kaydet" method="POST" th:object="${yeniRez}">
+                <div th:if="${hataMesaji}" class="alert alert-danger text-center" th:text="${hataMesaji}"></div>
+                <div th:if="${param.hata == 'gecmis_tarih'}" class="alert alert-danger text-center">Hata: Geçmiş tarihe işlem yapılamaz!</div>
+                <div th:if="${param.hata == 'yetersiz_kontenjan'}" class="alert alert-danger text-center">Hata: Tur kontenjanı dolu!</div>
 
-                    <div th:if="${param.hata}" class="alert alert-danger text-center">
-    Seçtiğiniz turda maalesef yeterli kontenjan kalmamıştır!
-</div>
+                <form action="/rezervasyonlar/kaydet" method="POST" th:object="${yeniRez}">
                     
+                    <input type="hidden" th:field="*{rezervasyonId}">
+
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Rezervasyon No</label>
-                        <input type="text" th:field="*{rezervasyonNo}" class="form-control bg-light" 
-                               placeholder="Otomatik Oluşturulacak (Dokunmayınız)" readonly>
+                        <label class="fw-bold">Rezervasyon No</label>
+                        <input type="text" th:field="*{rezervasyonNo}" class="form-control bg-light rounded-0" 
+                               placeholder="Otomatik Oluşturulacak" readonly>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Müşteri Seç</label>
-                            <select th:field="*{musteri}" class="form-select" required>
+                            <label class="fw-bold">Müşteri Seç</label>
+                            <select th:field="*{musteri}" class="form-select rounded-0" required>
                                 <option value="">Seçiniz...</option>
                                 <option th:each="m : ${musteriler}" 
                                         th:value="${m.musteriId}" 
@@ -34,8 +42,8 @@
                         </div>
                         
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Tur Seç</label>
-                            <select th:field="*{tur}" id="turSelect" class="form-select" onchange="tarihHesapla()" required>
+                            <label class="fw-bold">Tur Seç</label>
+                            <select th:field="*{tur}" id="turSelect" class="form-select rounded-0" onchange="tarihHesapla()" required>
                                 <option value="" data-sure="0">Seçiniz...</option>
                                 <option th:each="t : ${turlar}" 
                                         th:value="${t.turId}" 
@@ -47,32 +55,30 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Başlangıç Tarihi</label>
-                            <input type="date" th:field="*{baslangicTarihi}" id="baslangicTarihi" 
-                                   class="form-control" onchange="tarihHesapla()" required>
+                            <label class="fw-bold">Başlangıç Tarihi</label>
+                            <input type="date" th:field="*{baslangicTarihi}" id="basTarih" 
+                                   class="form-control rounded-0" onchange="tarihHesapla()" required>
                         </div>
                         
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-success">Dönüş Tarihi (Otomatik)</label>
-                            <input type="text" id="bitisTarihiGosterim" class="form-control bg-light fw-bold text-success" 
-                                   placeholder="Tur seçilince hesaplanır" readonly>
+                            <label class="fw-bold text-success">Bitiş Tarihi (Otomatik)</label>
+                            <input type="text" id="bitisTarih" class="form-control bg-light fw-bold text-success rounded-0" readonly>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Kişi Sayısı</label>
-                            <input type="number" th:field="*{kisiSayisi}" class="form-control" value="1" required>
+                            <label class="fw-bold">Kişi Sayısı</label>
+                            <input type="number" th:field="*{kisiSayisi}" class="form-control rounded-0" value="1" min="1" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Toplam Tutar</label>
-                            <input type="number" step="0.01" th:field="*{toplamTutar}" class="form-control" placeholder="Otomatik hesaplanır">
+                            <label class="fw-bold">Toplam Tutar ($)</label>
+                            <input type="number" step="0.01" th:field="*{toplamTutar}" class="form-control bg-light rounded-0" 
+                                   placeholder="Otomatik Hesaplanır" readonly>
                         </div>
                     </div>
 
-                    <input type="hidden" name="durum" value="BEKLIYOR">
-
-                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">KAYDET VE OLUŞTUR</button>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-0">KAYDET VE OLUŞTUR</button>
                 </form>
             </div>
         </div>
@@ -80,28 +86,17 @@
 
     <script>
         function tarihHesapla() {
-            // 1. Seçilen Turun Süresini Al
             var turSelect = document.getElementById("turSelect");
             var secilenOption = turSelect.options[turSelect.selectedIndex];
-            var sureGun = parseInt(secilenOption.getAttribute("data-sure"));
+            var sure = parseInt(secilenOption.getAttribute("data-sure"));
+            
+            var basTarihInput = document.getElementById("basTarih").value;
 
-            // 2. Seçilen Başlangıç Tarihini Al
-            var baslangicInput = document.getElementById("baslangicTarihi").value;
-
-            // Eğer ikisi de doluysa hesapla
-            if (sureGun > 0 && baslangicInput) {
-                var tarih = new Date(baslangicInput);
-                
-                // Gün ekle (Başlangıç + Süre)
-                tarih.setDate(tarih.getDate() + sureGun);
-
-                // Tarihi gg.aa.yyyy formatına çevir
-                var gun = String(tarih.getDate()).padStart(2, '0');
-                var ay = String(tarih.getMonth() + 1).padStart(2, '0'); // Aylar 0'dan başlar
-                var yil = tarih.getFullYear();
-
-                // Kutuyu doldur
-                document.getElementById("bitisTarihiGosterim").value = gun + "." + ay + "." + yil;
+            if (sure > 0 && basTarihInput) {
+                var tarih = new Date(basTarihInput);
+                tarih.setDate(tarih.getDate() + sure);
+                // Bitiş tarihini inputa yaz
+                document.getElementById("bitisTarih").value = tarih.toISOString().split('T')[0];
             }
         }
     </script>
